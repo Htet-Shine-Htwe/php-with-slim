@@ -14,14 +14,17 @@ services:
     working_dir: /var/www/
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    ports:
+      - "9003:9003"
     volumes:
       - ../:/var/www
+      - ./local.ini:/usr/local/etc/php/conf.d/local.ini
   nginx:
     image: nginx:1.19-alpine
     container_name: expennies-nginx
     restart: always
     ports:
-      - "8000:80"
+      - "8012:80"
     volumes:
       - ../:/var/www
       - ./nginx:/etc/nginx/conf.d
@@ -34,4 +37,4 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3355:3306"
