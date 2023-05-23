@@ -47,7 +47,7 @@ return [
     Twig::class => function (Config $config, ContainerInterface $container)
     {
         $twig = Twig::create(VIEW_PATH, [
-            'cache' => STORAGE_PATH . '/cache/templates',
+            // 'cache' => STORAGE_PATH . '/cache/templates',
             'auto_reload' => AppEnvironment::isDevelopment($config->get('app_environment')),
         ]);
 

@@ -15,7 +15,7 @@ return [
     'log_error_details'     => true,
     'doctrine'              => [
         'dev_mode'   => AppEnvironment::isDevelopment($appEnv),
-        'cache_dir'  => STORAGE_PATH . '/cache/doctrine',
+        // 'cache_dir'  => STORAGE_PATH . '/cache/doctrine',
         'entity_dir' => [APP_PATH . '/Entity'],
         'connection' => [
             'driver'   => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
