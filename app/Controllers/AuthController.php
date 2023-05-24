@@ -29,7 +29,22 @@ class AuthController
 
     public function login(Request $request, Response $response): Response
     {
-        return $response;
+        $data = $request->getParsedBody();
+        $v = new Validator($data);
+        $v->rule('required', ['email','password']);
+        $v->rule('email', 'email');
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+
+        if(! $user || ! password_verify($data['password'],$user->getPassword())){
+            throw new ValidationException(['password' => 'you have entered invalid username or password']);
+        }
+        
+        session_regenerate_id();
+
+        $_SESSION['user'] = $user->getId();
+
+        return $response->withHeader('Location','/')->withStatus(302);
     }
 
     public function register(Request $request, Response $response): Response
