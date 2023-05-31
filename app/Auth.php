@@ -3,6 +3,7 @@
 namespace App;
 use App\Contracts\AuthInterface;
 use App\Contracts\UserInterface;
+use App\Contracts\UserProviderServiceInterface;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 
@@ -11,7 +12,7 @@ class Auth implements AuthInterface
 
     protected ?UserInterface $user = null;
 
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(private readonly UserProviderServiceInterface $userProvider)
     {
 
     }
@@ -28,7 +29,7 @@ class Auth implements AuthInterface
         {
             return null;
         }
-        $user = $this->entityManager->getRepository(User::class)->find($userId);
+        $user = $this->userProvider->getById($userId);
 
         if(!$user)
         {
@@ -42,7 +43,7 @@ class Auth implements AuthInterface
 
     public function attempt(array $credentials):bool
     {
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->userProvider->getByCredentials($credentials);
 
         if(! $user || ! $this->checkCredentials($user,$credentials)){
             return false;
