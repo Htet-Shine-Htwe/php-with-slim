@@ -6,26 +6,23 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use App\Contracts\SessionInterface;
 
 class StartSessionMiddleware implements MiddlewareInterface
 {
+
+    public function __construct(private readonly SessionInterface $session)
+    {
+
+    }
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) :ResponseInterface
     {
-        if(session_status() === PHP_SESSION_ACTIVE)
-        {
-            throw new \RuntimeException('Session was already been started');
-        }
-        
-        if(headers_sent($filename,$line))
-        {
-            throw new \RuntimeException('Header already sent');
-        }
-
-        session_set_cookie_params(['secure' => true,'httponly' => true,'samesite' => 'lax']);
-
-        session_start();
+        $this->session->start();
 
         $response = $handler->handle($request);
+
+        $this->session->close();
         session_write_close();
         return $response;
     }

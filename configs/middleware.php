@@ -17,7 +17,6 @@ return function (App $app) {
     $config    = $container->get(Config::class);
 
     // Twig
-    $app->add(AuthenticateMiddleware::class);
     
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
 
