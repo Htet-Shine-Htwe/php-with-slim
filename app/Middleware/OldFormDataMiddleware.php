@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use App\Contracts\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -10,7 +11,8 @@ use Slim\Views\Twig;
 
 class OldFormDataMiddleware implements MiddlewareInterface
 {
-    public function __construct(protected readonly Twig $twig)
+    public function __construct(protected readonly Twig $twig,private readonly SessionInterface $session
+    )
     {
 
     }
@@ -18,12 +20,10 @@ class OldFormDataMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
 
-        if(! empty($_SESSION['old']))
+        if($old = $this->session->getFlash('old'))
         {
-            $this->twig->getEnvironment()->addGlobal('old',$_SESSION['old']);
+            $this->twig->getEnvironment()->addGlobal('old',$old);
         }
-
-        unset($_SESSION['old']);
 
         $response = $handler->handle($request);
         return $response;

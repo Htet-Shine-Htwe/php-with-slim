@@ -24,7 +24,7 @@ services:
     container_name: expennies-nginx
     restart: always
     ports:
-      - "8012:80"
+      - "8013:80"
     volumes:
       - ../:/var/www
       - ./nginx:/etc/nginx/conf.d

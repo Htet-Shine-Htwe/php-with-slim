@@ -14,7 +14,7 @@ class GuestMiddleware implements MiddlewareInterface
     public function __construct(protected ResponseFactory $responseFactory,
     protected readonly SessionInterface $session)
     {
-
+        
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) :ResponseInterface
@@ -23,6 +23,8 @@ class GuestMiddleware implements MiddlewareInterface
         {
             return $this->responseFactory->createResponse(302)->withHeader('Location','/');
         }
+  
+
         return $handler->handle($request);
     }
 }
