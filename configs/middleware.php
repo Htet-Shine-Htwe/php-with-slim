@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 use App\Config;
 use App\Middleware\AuthenticateMiddleware;
+use App\Middleware\CsrfFieldMiddleware;
 use App\Middleware\OldFormDataMiddleware;
 use App\Middleware\StartSessionMiddleware;
 use App\Middleware\ValidationErrorsMiddleware;
@@ -17,6 +18,10 @@ return function (App $app) {
     $config    = $container->get(Config::class);
 
     // Twig
+
+    $app->add(CsrfFieldMiddleware::class);
+    
+    $app->add('csrf');
     
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
 

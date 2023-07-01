@@ -30,6 +30,7 @@ use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
 use Twig\Extra\Intl\IntlExtension;
 
+use Slim\Csrf\Guard;
 use function DI\create;
 
 return [
@@ -59,6 +60,7 @@ return [
         $twig = Twig::create(VIEW_PATH, [
             // 'cache' => STORAGE_PATH . '/cache/templates',
             'auto_reload' => AppEnvironment::isDevelopment($config->get('app_environment')),
+            'autoescape' => false
         ]);
 
         $twig->addExtension(new IntlExtension());
@@ -89,4 +91,5 @@ return [
 
     ),
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(RequestValidatorFactory::class),
+    'csrf' => fn(ResponseFactoryInterface $responseFactory) => new Guard($responseFactory,persistentTokenMode:true),
 ];  
