@@ -10,6 +10,7 @@ use App\Middleware\StartSessionMiddleware;
 use App\Middleware\ValidationErrorsMiddleware;
 use App\Middleware\ValidationExceptionMiddleware;
 use Slim\App;
+use Slim\Middleware\MethodOverrideMiddleware;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
@@ -18,7 +19,7 @@ return function (App $app) {
     $config    = $container->get(Config::class);
 
     // Twig
-
+    $app->add(MethodOverrideMiddleware::class);
     $app->add(CsrfFieldMiddleware::class);
     
     $app->add('csrf');
